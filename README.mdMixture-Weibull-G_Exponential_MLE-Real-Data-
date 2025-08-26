@@ -1,0 +1,30 @@
+# Mixture-Weibull-G_Exponential_MLE-Real-Data-
+R code for Maximum Likelihood Estimation Mixture of Weibull-G Exponential distribution using real data.
+ x=c(0.55, 0.74, 0.77, 0.81, 1.24, 0.93, 1.25
+, 1.36, 1.49, 1.52, 1.58, 1.61, 1.64, 1.68
+, 1.73, 1.81, 2.00, 1.04, 1.27, 1.39, 1.49
+, 1.53, 1.59, 1.61, 1.50, 1.54, 1.60, 1.62
+, 1.66, 1.69, 1.76, 1.84, 1.66, 1.70, 1.77
+, 1.84, 0.84, 1.30, 1.48, 1.51)
+x1=c(1.66, 1.66, 1.68, 1.68, 1.76, 1.76, 1.82, 1.82, 2.01, 2.01, 1.11, 1.11, 1.28, 1.28
+, 1.42, 1.42, 2.24, 2.24, 1.13, 1.13, 1.29, 1.29, 1.48, 1.48, 1.50, 1.50, 1.55, 1.55
+, 1.61, 1.61, 1.62, 1.62, 1.55, 1.55, 1.61, 1.63, 1.67, 1.70
+, 1.78, 1.89)
+library("maxLik")
+logLikFun <- function(param){
+alpha=param[1]
+kappa=param[2]
+lambda=param[3]
+a=param[4]
+k=param[5]
+l=param[6]
+w=param[7]
+   f1=(alpha*kappa*lambda*(1-exp(-lambda*x))^(kappa-1)*exp(lambda*kappa*x-alpha*(exp(lambda*x)-1)^(kappa)))
+f2=(a*k*l*(1-exp(-l*x1))^(k-1)*exp(l*k*x1-a*(exp(l*x1)-1)^(k))) 
+ sum(w*f1+(1-w)*f2,log=TRUE)
+   }
+mle <- maxLik(logLik = logLikFun, start = c(alpha=0.0003655,kappa=2.0656562,lambda=2.3711817,a=0.0015740,k=1.9192848,l=2.0888378,w=0.6405151),method= "CG")
+summary(mle)
+coef(mle)
+stdEr(mle)
+AIC(mle)
